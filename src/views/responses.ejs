@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>responses</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/dataTables.bootstrap.min.css'>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.0.2/css/searchPanes.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.dataTables.min.css">
+
+
+
+<style>
+  html, body {
+  background-color: #c1c1e1;
+}
+
+table {
+  background: white;
+}
+
+select, .select2 {
+  display: block;
+  width: 100%;
+}
+
+/* main {
+  margin: 1rem auto;
+  max-width: 960px;
+} */
+
+.filters {
+  background: #a6a6d4;
+  border-color: #8d8dc8;
+}
+
+.table-topper {
+  background-color: #e1e1e1;
+}
+.table-topper:hover, .table-topper:active {
+  background-color: #d4d4d4;
+}
+</style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<main>
+  <section class="filters well">
+    <fieldset class="row">
+      <!-- <legend class="col-xs-12">Filters</legend> -->
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="grade">STATE</label>
+          <select id="grade" name="grade">
+            <!-- <option value="" ></option> -->
+
+            <option value="Gujarat">Gujarat</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="AndhraPradesh"  selected default>AndhraPradesh</option>
+          <option value="Telagana">Telagana</option>
+          <option value="TamilNadu">TamilNadu</option>
+            
+          <option value="MadhyPradesh">MadhyPradesh</option>
+          
+        </select>
+        </div>
+      </div>
+     
+     </fieldset>
+    </fieldset>
+  </section>
+
+  <section class="data">
+    <div class="table-responsive">
+      <table class="datatable table table-bordered table-striped table-hover"
+       data-table-source="" data-table-filter-target id="data"  >
+        <thead>
+          <tr>
+            <th class="table-topper">State</th>
+            <th scope="table-topper" >GENDER</th>
+            <th scope="table-topper" >Name</th>
+            <th class="table-topper">AC Name</th>
+            <th class="table-topper">AC Number</th>
+            <th class="table-topper">mobile</th>
+            <% dates.forEach((date)=>{%>
+              <th class="table-topper"><%=date%></th>
+             <%})%>
+          </tr>
+        </thead>
+        <tbody>
+          
+            
+
+            <%response.forEach((res)=>{%>
+            <tr>
+                <td><%= res.state %></td>
+                <td><%= res.GENDER%></td>
+                <td><%= res.Name%></td>
+                <td><%= res.AC_Name%></td>
+                <td><%= res.AC_Number %></td>
+              <td><%=res.mobile%></td>
+             
+              <% res.responses.forEach((val)=>{%>
+                <td><%= val.Response%></td>
+                
+
+             <% })%>
+            </tr>
+          <%})%>
+          
+            
+          
+          
+          
+        </tbody>
+        <tfoot>
+            <tr>
+                <th class="table-topper">State</th>
+                <th class="table-topper">GENDER</th>
+                <th scope="table-topper">NAME</th>
+
+                <th class="table-topper">AC name</th>
+                <th class="table-topper">AC NUMBER</th>
+                
+            <th class="table-topper" disabled>mobile</th>
+            <% dates.forEach((date)=>{%>
+              <th class="table-topper"><span>Response</span><%=date%></th>
+              
+             <%})%>
+                
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+  <button class="btn btn-success" onclick="exportData()">
+    <span class="glyphicon glyphicon-download "></span>
+    Download list</button>
+
+</main>
+<!-- partial -->
+  <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script> -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/dataTables.bootstrap.min.js'></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+
+
+
+<script src="https://cdn.datatables.net/searchpanes/2.0.2/js/dataTables.searchPanes.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+
+
+
+
+
+
+
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.js" data-semver="1.9.4" data-require="datatables@*"></script> -->
+
+<link rel='stylesheet' href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css'>
+<link rel='stylesheet' href='https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css'>
+<!-- <script src='//code.jquery.com/jquery-1.12.3.js'></script> -->
+<script src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js'></script>
+<script src='https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js'></script>
+<script src='//cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js'></script>
+<script src='//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js'></script>
+<script src='//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js'></script>
+<script src='//cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js'></script>
+<script src='//cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js'></script>
+
+
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+
+
+
+
+<script>
+  (function($){
+  
+  var dataTable;
+  
+  var select2Init = function(){
+    $('#grade').select2({
+      dropdownAutoWidth : true,
+      allowClear: true,
+      placeholder: "Select a state",
+      
+    });
+  };
+  
+  var dataTableInit = function(){
+    dataTable = $('table').dataTable({
+      
+    });
+  };
+  
+  var dtSearchInit = function(){
+    
+    $('#grade').change(function(){
+      dtSearchAction( $(this) , 0)
+    });
+  
+    
+  }; 
+  
+  dtSearchAction = function(selector,columnId){
+      var fv = selector.val();
+      if( (fv == '') || (fv == null) ){
+        dataTable.api().column(columnId).search('', true, false).draw();
+      } else {
+        dataTable.api().column(columnId).search(fv, true, false).draw();
+      }
+  };
+  
+  
+	$(document).ready(function(){
+    select2Init();
+    dataTableInit();
+    dtSearchInit();
+	});
+
+})(jQuery);
+</script>
+<script>
+    $(document).ready(function () {
+    const table = $('#data').DataTable({
+      
+        // dom: 'Pfrtip',
+        
+      dom: 'Bfrtip',
+        buttons: [
+            'copy', 'excelFlash', 'excel', 'pdf', 'print','colvis',{
+            text: 'Reload',
+            action: function ( e, dt, node, config ) {
+                dt.ajax.reload();
+            }
+        }
+        ],
+        
+       
+        
+        
+        
+        initComplete: function () {
+            var api = this.api();
+            api.$('td').click(function () {
+                api.search(this.innerHTML).draw();
+            });
+
+            this.api()
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+ 
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+        
+        
+    });
+    var container = $('<div/>').insertBefore(table.table().container());
+ 
+    var chart = Highcharts.chart(container[0], {
+        chart: {
+            type: 'pie',
+        },
+        title: {
+            text: 'State wise chart',
+        },
+        series: [
+            {
+                data: chartData(table),
+            },
+        ],
+    });
+
+ // On each draw, update the data in the chart
+ table.on('draw', function () {
+     chart.series[0].setData(chartData(table));
+ });
+ function chartData(table) {
+    var counts = {};
+ 
+    // Count the number of entries for each position
+    table
+        .column(6, { search: 'applied' })
+        .data()
+        .each(function (val) {
+            if (counts[val]) {
+                counts[val] += 1;
+            } else {
+                counts[val] = 1;
+            }
+        });
+ 
+    // And map it to the format highcharts uses
+    return $.map(counts, function (val, key) {
+        return {
+            name: key,
+            y: val,
+        };
+    });
+}
+
+    
+});
+
+
+
+
+
+</script>
+<script>
+    //  for download the data 
+    function exportData(){
+    /* Get the HTML data using Element by Id */
+    var table = document.getElementById("data");
+ 
+    /* Declaring array variable */
+    var rows =[];
+ 
+      //iterate through rows of table
+    for(var i=0,row; row = table.rows[i];i++){
+        //rows would be accessed using the "row" variable assigned in the for loop
+        //Get each cell value/column from the row
+        column1 = row.cells[0].innerText;
+        column2 = row.cells[1].innerText;
+        column3 = row.cells[2].innerText;
+        column4 = row.cells[3].innerText;
+        // column5 = row.cells[4].innerText;
+        // column6 = row.cells[5].innerText;
+        // column7 = row.cells[6].innerText;
+        // column8 = row.cells[7].innerText;
+        // column9 = row.cells[8].innerText;
+ 
+    /* add a new records in the array */
+        rows.push(
+            [
+                column1,
+                column2,
+                column3,
+                column4,
+                // column5,
+                // column6,
+                // column7,
+                // column8,
+                // column9,
+                
+              
+            ]
+        );
+ 
+        }
+        csvContent = "data:text/csv;charset=utf-8,";
+         /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+        rows.forEach(function(rowArray){
+            row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+ 
+        /* create a hidden <a> DOM node and set its download attribute */
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "report.csv");
+        document.body.appendChild(link);
+         /* download the data file named "Stock_Price_Report.csv" */
+        link.click();
+}
+
+</script>
+
+
+</body>
+</html>

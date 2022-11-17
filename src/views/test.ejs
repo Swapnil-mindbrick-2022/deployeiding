@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <td>name</td>
+                    <td>date</td>
+                    <td>col</td>
+                    <td>had</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>lkjlkjkj</td>
+                    <td>jjhjhjhj</td>
+                    <td>hjjjhj</td>
+                    <td>jhjhj</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <script>
+            const alldata = (JSON.parse(`<%-alldata %>`))
+            // console.log(maindata.length)
+            const ivrs = (JSON.parse(`<%-ivrs %>`))
+
+
+
+        alldata.forEach((data)=>{
+            
+            let responses = []
+            data.responses = responses
+
+        })
+        for (let i = 0; i < ivrs.length;i++){
+            for (let j = 0;j < alldata.length;j++){
+                if (ivrs[i].mobile === alldata[j].mobile){
+            alldata[j].responses.push(ivrs[i].Response)
+        }
+
+    }
+  
+}
+console.log(alldata)
+
+        
+    
+
+        // maindata.forEach((data)=>{
+        // })
+
+
+
+        // for (let i = 0; i < maindata.length;i++){
+        //     for (let j = 0; j < maindata[i].length;j++){
+                
+
+        //     }
+        // }
+
+
+          
+
+        </script>
+    </body>
+</html>

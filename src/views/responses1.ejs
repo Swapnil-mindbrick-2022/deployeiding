@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Filter column select</title>
+  <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap.min.css'>
+<link rel='stylesheet' href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
+<style>
+  .dropdown ul {
+  margin: -1px 0 0 0;
+}
+.dropdown a,
+.dropdown a:visited {
+  color: #fff;
+  text-decoration: none;
+  outline: none;
+  font-size: 12px;
+}
+.dropdown dt a {
+  background-color: #fff;
+  display: block;
+  overflow-x: hidden;
+  border: 1px solid #ccc;
+  line-height: 10px;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.dropdown dt a:focus {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.dropdown {
+  margin: 0px;
+}
+.dropdown:after {
+  content: '▾';
+  float: right;
+  margin-top: -20px;
+  margin-right: 10px;
+  font-size: 28px;
+  line-height: 10px;
+}
+.dropdown dt a p {
+  color: #333;
+  font-size: 10px;
+}
+.dropdown dd ul {
+  background-color: #fff;
+  color: #333;
+  display: none;
+  padding: 5px;
+  position: absolute;
+  list-style: none;
+  width: 100%;
+  height: 100px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.multiSelect input {
+  margin-right: 5px;
+}
+.ddLabel {
+  color: #333;
+  line-height: 8px;
+  font-size: 10px;
+  padding-top: 6px;
+}
+</style>
+</head>
+
+<body>
+<!-- partial:index.partial.html -->
+<table id="example" class="display nowrap" width="100%">
+        <thead>
+          <tr>
+            <th>mobile<th>
+              <% dates.forEach((date)=>{%>
+              <th><span>Response</span><%=date%></th>
+             <%})%>
+              <!-- <th scope="col" >SR NO</th>
+              <th scope="col" > GENDER</th>
+              <th scope="col">MOBILE</th>
+            
+              <th scope="col">Responses</th> -->
+              
+            </tr>
+
+            
+  
+          </tr>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+           <td></td>
+            
+            
+           
+          </tr>
+        </thead>
+        <tbody>
+          <%response.forEach((res)=>{%>
+            <tr>
+              <td><%=res.mobile%></td>
+              <td></td>
+              <% res.responses.forEach((val)=>{%>
+                <td><%= val.Response%></td>
+
+             <% })%>
+            </tr>
+
+          <%})%>
+          
+          <!-- <tr>
+            <td>9876564531</td>
+            <td></td>
+            <td>Others</td>
+            <td>congress</td>
+          </tr>
+          <tr>
+            <td>9876564531</td>
+            <td></td>
+            <td>Others</td>
+            <td>congress</td>
+          </tr> -->
+        </tbody>
+      </table>
+<!-- partial -->
+  <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+<script src='https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js'></script>
+<script src='https://netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script>
+<script src='https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap.min.js'></script>
+<script >
+  //  dynamic table 
+
+// let responses = []
+// alldata.forEach((data)=>{
+//             data.responses = responses
+
+//         })
+//         for (let i = 0; i < ivrs.length;i++){
+//             for (let j = 0;j < alldata.length;j++){
+//                 if (ivrs[i].mobile === alldata[j].mobile){
+//             alldata[j].responses.push(ivrs[i])
+//         }
+
+//     }
+  
+// }
+
+// let dates = []
+// ivrs.forEach(ele => {
+//   dates.push(ele.UploadDate)
+// });
+
+// // console.log(dates)
+
+// let uniquedates = [...new Set(dates)]
+
+
+// console.log(uniquedates)
+
+// for (let i =0;i < uniquedates.length;i++){
+//   for (let j =0;j < responses.length;j++){
+//     if (uniquedates[i] == responses[j].UploadDate && responses[j].Response !== 'invalid'){
+//       console.log('true')
+//     }else{
+//       console.log(false)
+//     }
+//   }
+// }
+
+
+/* Plugin API method to determine is a column is sortable */
+$.fn.dataTable.Api.register('column().searchable()', function() {
+  var ctx = this.context[0];
+  return ctx.aoColumns[this[0]].bSearchable;
+});
+
+
+$(document).ready(function() {
+  // Create the DataTable
+  var table = $('#example').DataTable({
+    orderCellsTop: true,
+    columnDefs: [{
+      searchable: false,
+      targets: [0]
+    }],
+  });
+
+  // Add filtering
+  table.columns().every(function() {
+    if (this.searchable()) {
+      var column = this;
+
+      var myList = $('<ul/>');
+      var myMulti = $('<div class="multiSelect"/>');
+      myList.appendTo(myMulti);
+
+      var myDd = $('<dd/>');
+      myMulti.appendTo(myDd);
+
+      var myDropdown = $('<dl class="dropdown"/>');
+      myDropdown.append('<dt><a href="#"><span class="ddLabel">Select</span><p class="multiSel"></p></a></dt>');
+      myDd.appendTo(myDropdown);
+
+      myDropdown.appendTo($('thead tr:eq(1) td').eq(this.index()))
+        .on('change', function() {
+          var vals = $(':checked', this).map(function(index, element) {
+            return $.fn.dataTable.util.escapeRegex($(element).val());
+          }).toArray().join('|');
+
+          column.search(vals.length > 0 ? '^(' + vals + ')$' : '', true, false).draw();
+        });
+
+
+      // Add data
+      this.data().sort().unique().each(function(d) {
+          myList.append($('<li><input type="checkbox" value="' + d + '"/>' + d + '</option>'));
+        });
+    }
+  });
+
+  $(".dropdown dt a").on('click', function(e) {
+    var dropdown = $(this).closest('.dropdown');
+    dropdown.find('ul').slideToggle('fast');
+
+    $('.dropdown').not(dropdown).find('ul').slideUp('fast');
+
+  });
+
+  $(document).bind('click', function(e) {
+    var $clicked = $(e.target);
+    if (!$clicked.parents().hasClass("dropdown")) { $(".dropdown dd ul").slideUp('fast');
+    }
+  });
+
+  $('.multiSelect input[type="checkbox"]').on('click', function() {
+    var multiSelect = $(this).closest('.multiSelect');
+    var multiSelectParent = multiSelect.parent().parent();
+    var multiSel = multiSelectParent.find('.multiSel');
+    var checkedValue = $(this).val();
+    
+    if ($(this).is(':checked')) {
+      if (multiSel.text() != '') {
+        checkedValue = ', ' + checkedValue;
+      }
+      
+      multiSel.append(checkedValue);
+      multiSelectParent.find('.ddLabel').hide();
+    } else {
+      if (multiSel.text() == checkedValue) {
+        multiSel.text(multiSel.text().replace(checkedValue, ''));
+      }
+      else {
+        multiSel.text(multiSel.text().replace(", " + checkedValue, ''));
+      }
+      
+      if (multiSel.text() == '') {
+          multiSelectParent.find('.ddLabel').show();
+      }
+    }
+  });
+});
+
+</script>
+
+</body>
+</html>

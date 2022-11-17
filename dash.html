@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Charts.js</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<style>
+  div { margin: -.5em auto; text-align:center; width: 90%; height: 390px }
+</style>
+</head>
+
+<body>
+<!-- partial:index.partial.html -->
+<div id="chartdiv"></div>
+<!-- partial -->
+  <script src='https://www.amcharts.com/lib/amcharts.js'></script>
+  <script>
+    var chart;
+var legend;
+
+var chartData = [{
+    State: "AAP",
+    value: 260},
+{
+    State: "BJP",
+    value: 201},
+{
+    State: "CONGRESS",
+    value: 65},
+{
+    State: "SHIV SENA",
+    value: 39},
+{
+    State: "MANSE",
+    value: 19},
+{
+    State: "MIM",
+    value: 10}];
+
+AmCharts.ready(function() {
+    // PIE CHART
+    chart = new AmCharts.AmPieChart();
+    chart.dataProvider = chartData;
+    chart.titleField = "State";
+    chart.valueField = "value";
+    chart.outlineColor = "";
+    chart.outlineAlpha = 0.8;
+    chart.outlineThickness = 2;
+    // this makes the chart 3D
+    chart.depth3D = 20;
+    chart.angle = 30;
+
+    // WRITE
+    chart.write("chartdiv");
+});
+  </script>
+  
+
+</body>
+</html>

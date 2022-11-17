@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+      <section class="pie_chart_content">
+        <div class="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="main_box">
+                        <h1>USER DASHBOARD</h1>
+                        <div id="chartdiv"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                <div class="count_box">
+                   <div class="from-groop">
+                    <label for="responses-input"> Total No. of Responces</label>
+                    <input type="text"  class="total-input form-control" readonly="readonly" id="txtresult2">
+
+                   </div>
+                   <div class="from-groop">
+                    <label for="state-input"> State</label>
+                    <input type="text"  class="total-input form-control" readonly="readonly" id="txtresult1">
+
+                   </div>
+                   <div class="from-groop">
+                    <label for="Party-input"> Party</label>
+                    <input type="text" class="total-input form-control" readonly="readonly" id="txtresult">
+
+                   </div>
+                   <div class="from-groop">
+                    <label for="age-input"> Age</label>
+                    <input type="text"  class="total-input form-control" readonly="readonly" id="txtresult3">
+
+                   </div>
+
+
+
+                </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dropdownbox">
+                        <lable>PARTY NAME</lable>
+                        <select id="ddlselect">
+                            <option value="" selected disabled>Selected Party</option>
+                            <option value="AAP">AAP</option>
+                            <option value="BJP">BJP</option>
+                            <option value="MANSE">MANSE</option>
+                            <option value="CONGRESS">CONGRESS</option>
+                        </select><br>
+                        <lable>State</lable>
+                        <select id="ddlselect1">
+                            <option value="" selected disabled>State</option>
+                            <option value="1">MAHARASHTRA</option>
+                            <option value="2">MADHYA PRADESH</option>
+                            <option value="3">TAMILNADU</option>
+                            <option value="4">TELANGANA</option>
+                        </select><br>
+                        <lable>No OF Responses</lable>
+                        <select id="ddlselect2">
+                            <option value="" selected disabled>Number Of Responses</option>
+                            <option value="1">5000</option>
+                            <option value="2">10000</option>
+                            <option value="3">15000</option>
+                            <option value="4">20000</option>
+                        </select><br>
+                        <lable>AGE</lable>
+                        <select id="ddlselect3">
+                            <option value="" selected disabled>AGE_RANGE</option>
+                            <option value="1">18-20</option>
+                            <option value="2">21-24</option>
+                            <option value="3">25-30</option>
+                            <option value="4">31-34</option>
+                            <option value="4">35-40</option>
+                        </select>
+                    
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        </div>
+        </section>
+
+        
+        <script>
+
+            $(function(){
+
+                $('#ddlselect').change(function(){
+
+                    const disaplayparty= $('#ddlselect option:selected').text()
+                    $('#txtresult').val(disaplayparty)
+
+                })
+            })
+            $(function(){
+
+            $('#ddlselect1').change(function(){
+
+                const disaplayparty= $('#ddlselect1 option:selected').text()
+                $('#txtresult1').val(disaplayparty)
+
+                })
+            })
+            $(function(){
+
+                $('#ddlselect2').change(function(){
+
+                    const disaplayparty= $('#ddlselect2 option:selected').text()
+                    $('#txtresult2').val(disaplayparty)
+
+                    })
+                })
+
+                $(function(){
+
+                $('#ddlselect3').change(function(){
+
+                    const disaplayparty= $('#ddlselect3 option:selected').text()
+                    $('#txtresult3').val(disaplayparty)
+
+                    })
+                })
+
+            
+
+                const responses = document.querySelector('.responses-input');
+                const state= document.querySelector('.state-input');
+                const party = document.querySelector('.Party-input');
+                const age = document.querySelector('.age-input');
+
+                const ctx = document.getElementById('mychart').getContext('2d')
+
+
+                const mychart= new Chart(ctx,{
+                    type:'pie',
+                    data:{
+
+                        labels: ["responses", 'state', 'party', 'age'],
+
+                        datasets:[{
+                            label: 'VOTES',
+                            data:[0,0,0,0],
+                            backgroundColor:['red', 'green', 'blue', 'yellow'],
+                            borderWidth:1
+                            
+
+                        }]
+                    
+                    }    
+                })
+                
+        
+                const updateChartVAlue = (input,dataOrder)=>{
+
+                    input.addEventListener ('change',e =>{
+                        mychart.data.datasets[0].data[dataOrder] = e.target.value;
+                        mychart.update()
+                    })
+                }
+            
+                updateChartVAlue (responses,0)
+                updateChartVAlue (state,1)
+                updateChartVAlue (party,2)
+                updateChartVAlue (age,3)
+            
+        </script>
+    </body>
+</html>

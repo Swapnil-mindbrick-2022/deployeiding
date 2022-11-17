@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Multiple file upload viewer</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<style>
+  * {
+  box-sizing: border-box;
+}
+body {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+input[type=file] {
+  position: absolute;
+  right: -9999px;
+  visibility: hidden;
+  opacity: 0;
+}
+
+input[type=submit] {
+  position: relative;
+  padding: 1rem 3rem;
+  background: #0c8fda;
+  display: inline-block;
+  text-align: center;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 0;
+  color: #fff;
+}
+input[type=submit]:hover {
+  background: #0b7fc2;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+label {
+  position: relative;
+  padding: 1rem 3rem;
+  background: #eee;
+  display: inline-block;
+  text-align: center;
+  overflow: hidden;
+  border-radius: 10px;
+}
+label:hover {
+  background: #0c8fda;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+div.files {
+  background: #eee;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+}
+div.files ul {
+  list-style: none;
+  padding: 0;
+  max-height: 150px;
+  overflow: auto;
+}
+div.files ul li {
+  padding: 0.5rem 0;
+  padding-right: 2rem;
+  position: relative;
+}
+div.files ul li i {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translatey(-50%);
+}
+div.container {
+  width: 100%;
+  padding: 0 2rem;
+}
+
+span.file-size {
+  color: #999;
+  padding-left: 0.5rem;
+}
+
+div.file {
+  background: #eee;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 10px;
+}
+div.file ul {
+  list-style: none;
+  padding: 0;
+  max-height: 150px;
+  overflow: auto;
+}
+div.file ul li {
+  padding: 0.5rem 0;
+  padding-right: 2rem;
+  position: relative;
+}
+div.file ul li i {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translatey(-50%);
+}
+
+</style>
+
+</head>
+<body>
+  <nav>
+    <a href="/api/logout"> logout</a>
+  </nav>
+
+<!-- partial:index.partial.html -->
+<div class="container">
+	<h1>  Upload Files</h1>
+</div>
+<div class="container">
+<form action="/api/multipleupload" method="post" enctype="multipart/form-data">
+	<div>
+		<label for="upload">
+			<input type="file" id="upload" name="files" id="multiExcelFile"
+			multiple>
+		Upload Files
+		</label>
+	</div>
+	<div class="files">
+		<h2>Selected Files</h2>
+	<ol></ol>
+	</div>
+	<input type="submit" value="Submit"  />
+</form>	
+</div>
+
+ <div class="container2">
+	<h1>IVRS Upload </h1>
+</div>
+<div class="container">
+<form action="api/ivrs"  method="post" id="ivrsfile">
+	<div>
+		<label for="upload">
+			<input type="file" id="uploadivrs" name="ivrs" id="multiExcelFile"
+			>
+		Upload Files
+		</label>
+	</div>
+	<div class="file">
+		<h2>Selected Files</h2>
+		<ul></ul>
+	</div>
+	<input type="submit" value="Submit"  />
+</form>	
+</div> 
+
+
+
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <script>
+    // no react or anything
+
+let state = {};
+
+// state management
+function updateState(newState) {
+  state = { ...state, ...newState };
+  console.log(state);
+}
+
+// event handlers
+$("input").change(function (e) {
+  let files = document.getElementsByTagName("input")[0].files;
+  let filesArr = Array.from(files);
+  updateState({ files: files, filesArr: filesArr });
+
+  renderFileList();
+});
+
+$(".files").on("click", "li > i", function (e) {
+  let key = $(this).
+  parent().
+  attr("key");
+  let curArr = state.filesArr;
+  curArr.splice(key, 1);
+  updateState({ filesArr: curArr });
+  renderFileList();
+});
+
+$("form").on("submit", function (e) {
+  e.preventDefault();
+  console.log(state);
+  renderFileList();
+});
+
+// render functions
+function renderFileList() {
+  let fileMap = state.filesArr.map((file, index) => {
+    let suffix = "bytes";
+    let size = file.size;
+    if (size >= 1024 && size < 1024000) {
+      suffix = "KB";
+      size = Math.round(size / 1024 * 100) / 100;
+    } else if (size >= 1024000) {
+      suffix = "MB";
+      size = Math.round(size / 1024000 * 100) / 100;
+    }
+
+    return `<li key="${index}">${
+    file.name
+    } <span class="file-size">${size} ${suffix}</span><i class="material-icons md-48">delete</i></li>`;
+  });
+  $("ol").html(fileMap);
+}
+
+
+// for ivrs
+function updateStateivrs(newState) {
+  state = { ...state, ...newState };
+  console.log(state);
+}
+
+// event handlers
+$("uploadivrs").change(function (e) {
+  let files = document.getElementsByid("uploadivrs")[0].files;
+  let filesArr = Array.from(files);
+  updateStateivrs({ files: files, filesArr: filesArr });
+
+  renderFileList1();
+});
+
+$(".file").on("click", "li > i", function (e) {
+  let key = $(this).
+  parent().
+  attr("key");
+  let curArr = state.filesArr;
+  curArr.splice(key, 1);
+  updateState({ filesArr: curArr });
+  renderFileList1();
+});
+
+
+$("ivrsfile").on("submit", function (e) {
+  e.preventDefault();
+  console.log(state);
+  renderFileList1();
+});
+
+// render functions
+function renderFileList1() {
+  let fileMap = state.filesArr.map((file, index) => {
+    let suffix = "bytes";
+    let size = file.size;
+    if (size >= 1024 && size < 1024000) {
+      suffix = "KB";
+      size = Math.round(size / 1024 * 100) / 100;
+    } else if (size >= 1024000) {
+      suffix = "MB";
+      size = Math.round(size / 1024000 * 100) / 100;
+    }
+
+    return `<li key="${index}">${
+    file.name
+    } <span class="file-size">${size} ${suffix}</span><i class="material-icons md-48">delete</i></li>`;
+  });
+  $("ul").html(fileMap);
+}
+
+  </script>
+
+</body>
+</html>
